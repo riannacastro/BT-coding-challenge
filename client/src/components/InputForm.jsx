@@ -27,7 +27,7 @@ export default function InputForm() {
       body: JSON.stringify({ addresses, apiKey, addressType })
     })
     .then((res) => res.json())
-    .then((data) => setData(data))
+    .then((data) => setData(data.body))
     .catch(err => {
       console.log(err)
     });
