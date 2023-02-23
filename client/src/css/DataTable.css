@@ -1,0 +1,21 @@
+table {
+  margin-top: 40px;
+  padding: 10px;
+  border: 2px solid;
+  border-radius: 10px;
+  width: 800px;
+  height: 200px;
+}
+
+th {
+padding: 15px;
+border-bottom: 1px solid #ddd;
+background-color: #27445C;
+color: white;
+}
+
+td {
+text-align: center;
+padding: 5px;
+border-bottom: 1px solid #ddd;
+}
