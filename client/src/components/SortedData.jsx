@@ -1,15 +1,45 @@
 import React from 'react'
 import { useEffect } from 'react';
 import { useState } from 'react';
+
 import DataChart from './DataChart';
 
-export default function SortedData({data}) {
+export default function SortedData({data, setLoading}) {
   const [sortedData, setSortedData] = useState([]);
   const [cat, setCat] = useState([]);
-  const [series, setSeries] = useState([]);
+  const [range, setRange] = useState([]);
+  const [chartVisible, setChartVisible] = useState(false);
+  const [chart, setChart] = useState({
+    options: {
+      chart: {
+        id: "basic-bar"
+      },
+      dataLabels: {
+        enabled: false
+      },
+      xaxis: {
+        categories: cat,
+        labels: {
+          show: true,
+          rotate: -55,
+          hideOverlappingLabels: true,
+          showDuplicates: false,
+          trim: false,
+          maxHeight: 220,
+        }
+      }
+    },
+    series: [
+      {
+        name: "Total Sent",
+        data: range
+      }
+    ]
+  });
 
   useEffect(() => {
-    const sorted = data.sort((a, b) => {
+    setLoading(false)
+    const sorted = [...data].sort((a, b) => {
       if (a.summary[0].total_sent > b.summary[0].total_sent) {
         return -1;
       }
@@ -18,19 +48,40 @@ export default function SortedData({data}) {
       }
       return 0;
     }).slice(0, 5)
-    setSortedData(sorted)
-  }, [data])
 
+    setSortedData(sorted);
+  }, []);
+  
   useEffect(() => {
     sortedData.forEach((x) => {
-      setCat((prevAddress) => [...prevAddress, x.address])
-      setSeries((prev) => [...prev, x.summary[0].total_sent])
+      setCat(cat => [...cat, x.address])
+      setRange(range => [...range, x.summary[0].total_sent])
     })
-  }, [sortedData])
+  }, [sortedData]);
 
+  useEffect(() => {
+    setChart(prevState => ({
+      ...prevState,
+      options: {
+        ...prevState.options,
+        xaxis: {
+          ...prevState.options.xaxis,
+          categories: cat
+        }
+      },
+      series: [
+        {
+          name: "Total Sent",
+          data: range
+        }
+      ]
+    }));
+    setChartVisible(true)
+  }, [cat]);
+  
   return (
     <div>
-      { cat && <DataChart cat={cat} series={series} /> }
+      { chartVisible && <DataChart chart={chart} /> }
     </div>
   )
 }

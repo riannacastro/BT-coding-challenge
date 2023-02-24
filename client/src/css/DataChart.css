@@ -1,5 +1,6 @@
 .app {
   margin-bottom: 10px;
+  height: auto;
   display: flex;
   align-items: center;
   justify-content: center;

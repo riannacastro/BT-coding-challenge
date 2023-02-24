@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+
 import '../css/InputForm.css'
 import DataTable from './DataTable';
 import SortedData from './SortedData';
@@ -8,17 +9,18 @@ export default function InputForm() {
   const [apiKey, setApiKey] = useState('');
   const [addressType, setAddressType] = useState('');
   const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
   const handleAddresses = (e) => {
     const rawAddresses = e.target.value;
-
     const array = rawAddresses.split(/\r?\n/);
     setAddresses(array);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoading(true)
     fetch('http://localhost:3001/api', {
       method: 'POST',
       headers: { 
@@ -26,17 +28,34 @@ export default function InputForm() {
       },
       body: JSON.stringify({ addresses, apiKey, addressType })
     })
-    .then((res) => res.json())
-    .then((data) => setData(data.body))
+    .then((res) => {
+      if(!res.ok) {
+        throw new Error('Sorry, something went wrong.')
+      }
+      return res.json();
+    })
+    .then((data) => {
+      if (data.statusCode >= 400) {
+        setLoading(false)
+        setError(true)
+      } else {
+        setData(data.body)
+      }
+    })
     .catch(err => {
       console.log(err)
     });
   };
 
+  const startLoading = (
+    <h1> LOADING... </h1>
+  );
+
   return (
     <div className='formBox'>
+     { loading ? startLoading : 
       <form method='POST' action='http://localhost:3001/api' onSubmit={handleSubmit}>
-        {error && <div>An error has occured.</div>}
+        {error && <h3>An error has occured.</h3>}
         <label>
           Addresses:
           <textarea
@@ -66,10 +85,10 @@ export default function InputForm() {
           />
         </label>
         <button className='submitBtn' type='submit'>Submit</button>
-      </form>
+      </form>}
       <div className='dataResults'>
         {data && <DataTable data={data} />}
-        {data && <SortedData data={data} />}
+        {data && <SortedData data={data} setLoading={setLoading} />}
       </div>
     </div>
   )

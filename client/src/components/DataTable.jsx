@@ -1,4 +1,5 @@
 import React from 'react';
+
 import '../css/DataTable.css';
 
 export default function DataTable({data}) {
@@ -21,12 +22,12 @@ export default function DataTable({data}) {
             <tbody key={i}>
               <tr>
                 <td>{val.address}</td>
-                <td>{val.summary[0].name}</td>
+                <td>{val.summary[1].name}</td>
                 <td>{val.asset}</td>
-                <td>{val.summary[0].current_balance}</td>
-                <td>{val.summary[0].total_sent}</td>
-                <td>{val.summary[0].total_received}</td>
-                <td>{val.summary[0].score}</td>
+                <td>{val.summary[1].current_balance}</td>
+                <td>{val.summary[1].total_sent}</td>
+                <td>{val.summary[1].total_received}</td>
+                <td>{val.summary[1].score}</td>
               </tr>
             </tbody>
           )
