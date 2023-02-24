@@ -21,7 +21,7 @@ export default function InputForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true)
-    fetch('http://localhost:3001/api', {
+    fetch('https://bt-coding-challenge.herokuapp.com/api', {
       method: 'POST',
       headers: { 
         'Content-Type': 'application/json'
@@ -54,7 +54,7 @@ export default function InputForm() {
   return (
     <div className='formBox'>
      { loading ? startLoading : 
-      <form method='POST' action='http://localhost:3001/api' onSubmit={handleSubmit}>
+      <form method='POST' action='https://bt-coding-challenge.herokuapp.com/api' onSubmit={handleSubmit}>
         {error && <h3>An error has occured.</h3>}
         <label>
           Addresses:

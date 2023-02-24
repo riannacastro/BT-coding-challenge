@@ -3,13 +3,15 @@ const request = require('request');
 
 const app = express();
 const cors = require('cors');
-const PORT = process.env.port || 3001;
+const path = require('path');
+const PORT = process.env.PORT || 3001;
 const base_url = 'https://fusion.blocktrace.com/api/v1'
 
 let corsOptions = {
-  origin: 'http://localhost:3000'
+  origin: 'https://bt-coding-challenge.herokuapp.com/'
 };
 
+app.use(express.static(path.join(__dirname + '/public')))
 app.use(express.json(), cors(corsOptions))
 
 app.post('/api', (req, res) => {
@@ -36,6 +38,6 @@ app.post('/api', (req, res) => {
   })
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server listening on ${PORT}`)
 });
